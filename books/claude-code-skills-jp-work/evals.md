@@ -112,6 +112,20 @@ python3 $P/invoice-jp/scripts/invoice_calc.py invoice.json
 
 **evals は、配布先と同じ条件で動かす**。これが2回目で得た教訓です。
 
+## 自動で回す：claude plugin eval
+
+この章では evals を手で回しましたが、Claude Code には evals を実行するコマンド `claude plugin eval` もあります。ヘルプ（`claude plugin eval --help`）によると、次のことができます。
+
+- プラグインの `evals/` フォルダにある評価ケース（`case.yaml`、または `prompt.md` と採点基準 `graders/*.md`）を実行し、採点結果を出す
+- プラグインを入れない状態との比較（ベースライン）を同時に行い、スコアの差を示す
+- 結果を `evals/results/` に保存する
+
+```bash
+claude plugin eval ./plugins/jp-backoffice-skills
+```
+
+ケースの書き方はこの章の `evals.json` と形式が違うため、そのままでは使えません。手で回して「何を確かめるべきか」が固まったら、このコマンドの形式に移すと、修正のたびに同じ条件で回し直せます。プラグインのコードを自分のマシンで実行するので、信頼できるプラグインにだけ使ってください。
+
 ## 運用のコツ
 
 - **スキルを直したら、関係する evals を回し直す**。直したつもりで別の項目が落ちることがあります。
