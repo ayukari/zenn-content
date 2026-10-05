@@ -28,7 +28,7 @@ https://code.claude.com/docs/en/skills
 ```markdown
 ---
 name: ringi-jp
-description: 稟議書（りんぎしょ）・社内決裁申請・購入申請・導入提案を、決裁者が判断しやすい構成で作成・添削する。「稟議を書いて」「決裁を取りたい」「購入申請」「ツール導入の申請」などで使う。
+description: 稟議書（りんぎしょ）・社内決裁申請・購入申請・導入提案を、決裁者が判断しやすい構成で作成・添削する。「稟議を書いて」「決裁を取りたい」「購入申請」「ツール導入の申請」などで使う。Japanese internal approval request (ringi) writer.
 ---
 
 # ringi-jp: 稟議書の作成と添削
