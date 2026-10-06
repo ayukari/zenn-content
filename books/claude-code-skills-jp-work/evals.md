@@ -120,11 +120,48 @@ python3 $P/invoice-jp/scripts/invoice_calc.py invoice.json
 - プラグインを入れない状態との比較（ベースライン）を同時に行い、スコアの差を示す
 - 結果を `evals/results/` に保存する
 
-```bash
-claude plugin eval ./plugins/jp-backoffice-skills
+このスキル集では、`evals.json` の21件をこの形式に移しました。1件ごとにフォルダを作り、依頼文（`prompt.md`）と採点基準（`graders/criteria.md`）を置きます。
+
+```
+plugins/jp-backoffice-skills/evals/
+└── invoice-02-missing-info/
+    ├── prompt.md            # 依頼文と、使ってよいツール
+    └── graders/
+        └── criteria.md      # チェックリスト（LLM が採点）
 ```
 
-ケースの書き方はこの章の `evals.json` と形式が違うため、そのままでは使えません。手で回して「何を確かめるべきか」が固まったら、このコマンドの形式に移すと、修正のたびに同じ条件で回し直せます。プラグインのコードを自分のマシンで実行するので、信頼できるプラグインにだけ使ってください。
+```markdown
+---
+max_turns: 15
+allowed_tools: [Read, Glob, Grep, Skill, Bash, Write]
+---
+
+取引先に請求書を出したい。デザイン料5万円です。
+```
+
+形式は `claude plugin eval init --bare <名前>` で作られるひな形に合わせています。実行は次のとおりです。
+
+```bash
+claude plugin eval ./plugins/jp-backoffice-skills --allow-tools Bash Write --judge-model sonnet
+```
+
+### 採点役のモデルで結果が変わった
+
+移行後に1件だけ試したところ、意外な結果になりました。
+
+| 採点役（judge） | 結果 |
+|---|---|
+| 既定（haiku） | 3票とも不合格 |
+| `--judge-model sonnet` | 3票とも合格 |
+
+haiku が不合格にした回の回答を読むと、内容は合格でした。不足情報をまとめて質問し、登録番号がない場合は区分記載請求書になることにも触れています。チェックリストが日本語で、判断に細かさが必要なため、既定の軽いモデルでは正しく採点できなかったと考えられます。
+
+**自動の evals を入れたら、採点役そのものも一度は人が確かめる**。これがこの移行での教訓です。正しい回答と誤った回答を1つずつ用意し、採点役がそれぞれを正しく判定するかを見ておくと安心です。
+
+### 注意点
+- スクリプトを使うスキルは、`--allow-tools Bash Write` を付けないとスクリプトを実行できません。
+- 既定では1件を3回ずつ実行し、プラグインなしの比較も行います。全件を回すと相応の利用量になるので、修正中は `--case` や `--tag` で絞り込みます。
+- プラグインのコードを自分のマシンで実行するので、信頼できるプラグインにだけ使ってください。
 
 ## 運用のコツ
 
@@ -140,5 +177,6 @@ claude plugin eval ./plugins/jp-backoffice-skills
 - チェックリストは合否が判断できる文で書き、採点は厳しめにする
 - 「たまたま通った」PASS は fragile として記録し、修正の対象にする
 - evals は配布先と同じ条件（スキルのフォルダの外）で動かす
+- 自動で採点するときは、採点役のモデルも確かめる
 
 次の章では、できあがったスキル集をプラグインとして配布する方法を説明します。
