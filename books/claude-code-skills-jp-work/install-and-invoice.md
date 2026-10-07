@@ -16,16 +16,18 @@ claude plugin install jp-backoffice-skills@jp-backoffice
 
 1行目でスキル集の配布元（marketplace）を登録し、2行目でプラグインをインストールします。`claude plugin list` を実行して、`jp-backoffice-skills@jp-backoffice` が `enabled` と表示されればインストールは完了です。
 
-入っているスキルは次の6つです。
+入っているスキルは次の8つです（v0.2.0 時点）。
 
 | スキル | できること |
 |---|---|
-| `invoice-jp` | インボイス対応の請求書の作成と点検 |
+| `invoice-jp` | インボイス対応の請求書の作成と点検（源泉徴収・立替金にも対応） |
 | `keigo-email` | ビジネスメールの作成と敬語の添削 |
 | `ringi-jp` | 稟議書の作成と添削 |
 | `nippo-jp` | 日報・週報の作成 |
 | `jp-tech-writing` | 技術文書の校正 |
 | `expense-ledger-jp` | 経費帳の作成 |
+| `gijiroku-jp` | 議事録の作成と点検（決定事項・ToDo） |
+| `houki-lookup` | 法令の条文検索（e-Gov 法令API） |
 
 ## 請求書を頼んでみる
 
